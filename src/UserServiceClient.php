@@ -40,7 +40,17 @@ class UserServiceClient implements UserServiceClientInterface
 
     public function readUsers(string $ownerId, array $filter): array
     {
-        // TODO: Implement readUsers() method.
+        $urlString = "$this->userServiceUrl/read-many.php?" .
+            http_build_query(
+                [
+                    'owner_id' => $ownerId,
+                    'filter' => $filter,
+                ],
+            );
+
+        $serverOutput = file_get_contents($urlString);
+
+        return json_decode($serverOutput, true);
     }
 
     public function updateUser(string $ownerId, string $userId, array $data = []): array
