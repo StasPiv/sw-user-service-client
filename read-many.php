@@ -6,7 +6,9 @@ use SmartWallet\UserClient\UserServiceClient;
 
 require_once 'vendor/autoload.php';
 
-$userServiceClient = new UserServiceClient('http://172.17.0.1:8081/');
-$data = $userServiceClient->readUsers('b3c0b25b-80e9-4d54-9d02-a93616b49f56', ['name' => 'TestUser231']);
+$userServiceUrl = getenv('USER_SERVICE') ?: '172.17.0.1';
+
+$userServiceClient = new UserServiceClient('http://' . $userServiceUrl);
+$data = $userServiceClient->readUsers(['name' => 'TestUser231']);
 
 echo json_encode($data);

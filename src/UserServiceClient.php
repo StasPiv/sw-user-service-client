@@ -11,16 +11,15 @@ class UserServiceClient implements UserServiceClientInterface
     ) {
     }
 
-    public function createUser(string $ownerId, array $data): array
+    public function createUser(array $data): array
     {
         $ch = curl_init();
         $url = $this->userServiceUrl . 'create.php';
-        $dataForPost = array_merge(['owner_id' => $ownerId], $data);
 
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_POST, 1);
 
-        curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($dataForPost));
+        curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($data));
         // Receive server response ...
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         $serverOutput = curl_exec($ch);
@@ -33,12 +32,11 @@ class UserServiceClient implements UserServiceClientInterface
         return json_decode($serverOutput, true);
     }
 
-    public function readUser(string $ownerId, string $userId): array
+    public function readUser(string $userId): array
     {
         $urlString = "$this->userServiceUrl/read.php?" .
             http_build_query(
                 [
-                    'owner_id' => $ownerId,
                     'user_id' => $userId,
                 ],
             );
@@ -48,12 +46,11 @@ class UserServiceClient implements UserServiceClientInterface
         return json_decode($serverOutput, true);
     }
 
-    public function readUsers(string $ownerId, array $filter): array
+    public function readUsers(array $filter): array
     {
         $urlString = "$this->userServiceUrl/read-many.php?" .
             http_build_query(
                 [
-                    'owner_id' => $ownerId,
                     'filter' => $filter,
                 ],
             );
